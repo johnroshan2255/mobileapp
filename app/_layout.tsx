@@ -1,37 +1,65 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-import 'react-native-reanimated';
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import { AuthContextProvider, useAuth } from '../context/authContext';
+import { Slot, useRouter, useSegments } from 'expo-router'
+import React, { useEffect } from 'react';
+import { MenuProvider } from 'react-native-popup-menu';
+import ErrorBoundary from "./../errorboundary/ErrorBoundary";
+import OfflineNotice from "./../hooks/OfflineNotice";
+import { View } from 'react-native';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
+const MainLayout = () => {
+  const router = useRouter();
+  const { isAuthenticated } = useAuth();
+  const segments = useSegments();
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
-SplashScreen.preventAutoHideAsync();
+  useEffect(()=>{
+
+      if(typeof isAuthenticated == 'undefined') {
+        return;
+      };
+      const isTabs = segments[0] == '(app)';
+      if(isAuthenticated && !isTabs){
+          router.replace('/Home');
+      }else if(isAuthenticated == false){
+          router.replace('auth/login');
+      }
+      
+  },[isAuthenticated]);
+
+    return (
+      <View style={{ flex: 1 }}>
+        <OfflineNotice />
+        <Slot />
+      </View>
+    );
+}
 
 export default function RootLayout() {
-  const colorScheme = useColorScheme();
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+
+  useFonts({
+    'outfit': require('./../assets/fonts/Outfit-Regular.ttf'),
+    'outfit-medium': require('./../assets/fonts/Outfit-Medium.ttf'),
+    'outfit-bold': require('./../assets/fonts/Outfit-Bold.ttf'),
   });
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync();
-    }
-  }, [loaded]);
-
-  if (!loaded) {
-    return null;
-  }
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    </ThemeProvider>
+    // <Stack screenOptions={{
+    //   headerShown: false,
+    // }}>
+    //   {/* <Stack.Screen name="index" options={{
+    //     headerShown: false,
+    //   }} /> */}
+    //   <Stack.Screen name="(app)" options={{
+    //     // headerShown: false,
+    //   }} />
+    // </Stack>
+    <ErrorBoundary>
+      <MenuProvider>
+        <AuthContextProvider>
+          <MainLayout />
+        </AuthContextProvider>
+      </MenuProvider>
+    </ErrorBoundary>
   );
 }
