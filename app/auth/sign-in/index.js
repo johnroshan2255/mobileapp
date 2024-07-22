@@ -4,6 +4,7 @@ import { useNavigation, useRouter } from 'expo-router'
 import { Colors } from './../../../constants/Colors';
 import Loading from '../../../components/Loading';
 import { useAuth } from '../../../context/authContext';
+import KeyBoardView from '../../../components/KeyBoardView';
 
 
 const styles = StyleSheet.create({
@@ -58,105 +59,107 @@ export default function SignIn() {
     }
 
   return (
-    <View style={{
-        padding: 25,
-        height: '100%',
-        paddingTop: 80,
-        backgroundColor: Colors.WHITE,
-    }}>
-      <Text style={{
-        fontFamily: 'outfit-bold',
-        fontSize: 30,
-      }}>Let's Sign You In</Text>
-
-       <Text style={{
-        fontFamily: 'outfit',
-        fontSize: 30,
-        color: Colors.GRAY,
-        marginTop: 20,
-      }}>Welcome Back</Text>
-
-       <Text style={{
-        fontFamily: 'outfit',
-        fontSize: 30,
-        color: Colors.GRAY,
-        marginTop: 10,
-      }}>You've been missed</Text>
-
-     {/* Email */}
+    <KeyBoardView>
       <View style={{
-        marginTop: 50,
+          padding: 25,
+          height: '100%',
+          paddingTop: 80,
+          backgroundColor: Colors.WHITE,
       }}>
         <Text style={{
-            fontFamily: 'outfit',
-        }}>Email</Text>
-        <TextInput 
-            onChangeText={(value) => setEmail(value)}
-            style={styles.input} placeholder='Enter Email' />
-      </View>
+          fontFamily: 'outfit-bold',
+          fontSize: 30,
+        }}>Let's Sign You In</Text>
 
-     {/* Password */}
-      <View style={{
-        marginTop: 20,
-      }}>
         <Text style={{
-            fontFamily: 'outfit',
-        }}>Password</Text>
-        <TextInput 
-            onChangeText={(value) => setPassword(value)}
-            secureTextEntry={true}
-            style={styles.input}
-            placeholder='Enter Password' />
-      </View>
+          fontFamily: 'outfit',
+          fontSize: 30,
+          color: Colors.GRAY,
+          marginTop: 20,
+        }}>Welcome Back</Text>
 
-      <View>
-        {isLoading?
-          (
-            <View style={{
-              display: 'flex',
-              flexDirection: 'row',
-              justifyContent: 'center',
-            }}>
-              <Loading size={150}/>
-            </View>
-          )
-          :(
-            <View>
-              {/* Sign in Button */}
-              <TouchableOpacity 
-                onPress={onSignIn}
-                style={{
-                padding: 20,
-                backgroundColor: Colors.PRIMARY,
-                borderRadius: 15,
-                marginTop: 50,
+        <Text style={{
+          fontFamily: 'outfit',
+          fontSize: 30,
+          color: Colors.GRAY,
+          marginTop: 10,
+        }}>You've been missed</Text>
+
+      {/* Email */}
+        <View style={{
+          marginTop: 50,
+        }}>
+          <Text style={{
+              fontFamily: 'outfit',
+          }}>Email</Text>
+          <TextInput 
+              onChangeText={(value) => setEmail(value)}
+              style={styles.input} placeholder='Enter Email' />
+        </View>
+
+      {/* Password */}
+        <View style={{
+          marginTop: 20,
+        }}>
+          <Text style={{
+              fontFamily: 'outfit',
+          }}>Password</Text>
+          <TextInput 
+              onChangeText={(value) => setPassword(value)}
+              secureTextEntry={true}
+              style={styles.input}
+              placeholder='Enter Password' />
+        </View>
+
+        <View>
+          {isLoading?
+            (
+              <View style={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
               }}>
-                <Text style={{
-                    color: Colors.WHITE,
-                    textAlign: 'center',
-                }}>Sign In</Text>
-              </TouchableOpacity>
+                <Loading size={150}/>
+              </View>
+            )
+            :(
+              <View>
+                {/* Sign in Button */}
+                <TouchableOpacity 
+                  onPress={onSignIn}
+                  style={{
+                  padding: 20,
+                  backgroundColor: Colors.PRIMARY,
+                  borderRadius: 15,
+                  marginTop: 50,
+                }}>
+                  <Text style={{
+                      color: Colors.WHITE,
+                      textAlign: 'center',
+                  }}>Sign In</Text>
+                </TouchableOpacity>
 
-              {/* Create Account Button */}
-              <TouchableOpacity style={{
-                padding: 20,
-                backgroundColor: Colors.WHITE,
-                borderRadius: 15,
-                marginTop: 20,
-                borderWidth: 1
-              }}
-              
-              onPress={ () => router.replace('auth/sign-up') }>
-                <Text style={{
-                    color: Colors.PRIMARY,
-                    textAlign: 'center',
-                }}>Create Account</Text>
-              </TouchableOpacity>
-            </View>
-          )
-        }
+                {/* Create Account Button */}
+                <TouchableOpacity style={{
+                  padding: 20,
+                  backgroundColor: Colors.WHITE,
+                  borderRadius: 15,
+                  marginTop: 20,
+                  borderWidth: 1
+                }}
+                
+                onPress={ () => router.replace('auth/sign-up') }>
+                  <Text style={{
+                      color: Colors.PRIMARY,
+                      textAlign: 'center',
+                  }}>Create Account</Text>
+                </TouchableOpacity>
+              </View>
+            )
+          }
+        </View>
+
       </View>
-
-    </View>
+    </KeyBoardView>
   )
 }

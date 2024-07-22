@@ -12,12 +12,8 @@ export default function Index() {
       style={{
         flex: 1,
       }}
-    >   {user?
-          <Redirect href={ '/Home' } />
-          :  
-          <Login />
-        }
-       
+    >
+      {user ? <Redirect href="/Home" /> : <Login />}
     </View>
   );
 }
